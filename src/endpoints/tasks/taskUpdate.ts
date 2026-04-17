@@ -1,16 +1,20 @@
 import { D1UpdateEndpoint } from "chanfana";
 import { HandleArgs } from "../../types";
-import { TaskModel } from "./base";
+import { ProductModel } from "./base";
 
-export class TaskUpdate extends D1UpdateEndpoint<HandleArgs> {
+export class ProductUpdate extends D1UpdateEndpoint<HandleArgs> {
 	_meta = {
-		model: TaskModel,
-		fields: TaskModel.schema.pick({
+		model: ProductModel,
+		fields: ProductModel.schema.pick({
 			name: true,
 			slug: true,
 			description: true,
-			completed: true,
-			due_date: true,
+			cijena: true,
+			materijal: true,
+			boja: true,
+			kategorija: true,
+			dostupna_kolicina: true,
+			slika_url: true,
 		}),
 	};
 }
