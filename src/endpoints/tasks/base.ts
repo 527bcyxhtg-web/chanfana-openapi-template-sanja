@@ -1,23 +1,26 @@
 import { z } from "zod";
 
-export const task = z.object({
+export const product = z.object({
 	id: z.number().int(),
 	name: z.string(),
 	slug: z.string(),
 	description: z.string(),
-	completed: z.boolean(),
-	due_date: z.string().datetime(),
+	cijena: z.number(),
+	materijal: z.string(),
+	boja: z.string(),
+	kategorija: z.string(),
+	dostupna_kolicina: z.number().int(),
+	slika_url: z.string().optional(),
 });
 
-export const TaskModel = {
-	tableName: "tasks",
+export const ProductModel = {
+	tableName: "products",
 	primaryKeys: ["id"],
-	schema: task,
+	schema: product,
 	serializer: (obj: Record<string, string | number | boolean>) => {
 		return {
 			...obj,
-			completed: Boolean(obj.completed),
 		};
 	},
-	serializerObject: task,
+	serializerObject: product,
 };
