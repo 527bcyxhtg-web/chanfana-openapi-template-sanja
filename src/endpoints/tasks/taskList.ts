@@ -1,12 +1,9 @@
 import { D1ListEndpoint } from "chanfana";
 import { HandleArgs } from "../../types";
-import { TaskModel } from "./base";
+import { ProductModel } from "./base";
 
-export class TaskList extends D1ListEndpoint<HandleArgs> {
+export class ProductList extends D1ListEndpoint<HandleArgs> {
 	_meta = {
-		model: TaskModel,
+		model: ProductModel,
 	};
-
-	searchFields = ["name", "slug", "description"];
-	defaultOrderBy = "id DESC";
 }
