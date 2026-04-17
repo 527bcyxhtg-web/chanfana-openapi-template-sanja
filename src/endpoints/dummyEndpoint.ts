@@ -2,46 +2,53 @@ import { contentJson, OpenAPIRoute } from "chanfana";
 import { AppContext } from "../types";
 import { z } from "zod";
 
-export class DummyEndpoint extends OpenAPIRoute {
+export class ProductsByCategory extends OpenAPIRoute {
 	public schema = {
-		tags: ["Dummy"],
-		summary: "this endpoint is an example",
-		operationId: "example-endpoint", // This is optional
+		tags: ["Pretraga"],
+		summary: "Dohvati proizvode po kategoriji",
+		operationId: "get-products-by-category",
 		request: {
 			params: z.object({
-				slug: z.string(),
+				kategorija: z.string().describe("Naziv kategorije (npr. medvjedici, zecevi, ribe)"),
 			}),
-			body: contentJson(
-				z.object({
-					name: z.string(),
-				}),
-			),
 		},
 		responses: {
 			"200": {
-				description: "Returns the log details",
-				...contentJson({
-					success: Boolean,
-					result: z.object({
-						msg: z.string(),
-						slug: z.string(),
-						name: z.string(),
-					}),
-				}),
+				description: "Lista proizvoda u odabranoj kategoriji",
+				...contentJson(
+					z.object({
+						success: z.boolean(),
+						kategorija: z.string(),
+						result: z.array(
+							z.object({
+								id: z.number(),
+								name: z.string(),
+								cijena: z.number(),
+								boja: z.string(),
+								materijal: z.string(),
+								dostupna_kolicina: z.number(),
+							})
+						),
+					})
+				),
 			},
 		},
 	};
 
-	public async handle(c: AppContext) {
+	async handle(c: AppContext) {
 		const data = await this.getValidatedData<typeof this.schema>();
+		const { kategorija } = data.params;
 
-		return {
+		const { results } = await c.env.DB.prepare(
+			"SELECT id, name, cijena, boja, materijal, dostupna_kolicina FROM products WHERE kategorija = ? ORDER BY name ASC"
+		)
+			.bind(kategorija)
+			.all();
+
+		return c.json({
 			success: true,
-			result: {
-				msg: "this is a dummy endpoint, serving as example",
-				slug: data.params.slug,
-				name: data.body.name,
-			},
-		};
+			kategorija,
+			result: results,
+		});
 	}
 }
