@@ -1,8 +1,8 @@
 import { ApiException, fromHono } from "chanfana";
 import { Hono } from "hono";
-import { tasksRouter } from "./endpoints/tasks/router";
+import { productsRouter } from "./endpoints/tasks/router";
 import { ContentfulStatusCode } from "hono/utils/http-status";
-import { DummyEndpoint } from "./endpoints/dummyEndpoint";
+import { ProductsByCategory } from "./endpoints/dummyEndpoint";
 
 // Start a Hono app
 const app = new Hono<{ Bindings: Env }>();
@@ -15,9 +15,7 @@ app.onError((err, c) => {
 			err.status as ContentfulStatusCode,
 		);
 	}
-
-	console.error("Global error handler caught:", err); // Log the error if it's not known
-
+	console.error("Global error handler caught:", err);
 	// For other errors, return a generic 500 response
 	return c.json(
 		{
@@ -40,11 +38,11 @@ const openapi = fromHono(app, {
 	},
 });
 
-// Register Tasks Sub router
-openapi.route("/tasks", tasksRouter);
+// Register Products router
+openapi.route("/products", productsRouter);
 
-// Register other endpoints
-openapi.post("/dummy/:slug", DummyEndpoint);
+// Register search endpoint
+openapi.get("/products/kategorija/:kategorija", ProductsByCategory);
 
 // Export the Hono app
 export default app;
