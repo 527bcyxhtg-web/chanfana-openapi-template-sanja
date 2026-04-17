@@ -1,15 +1,15 @@
 import { Hono } from "hono";
 import { fromHono } from "chanfana";
-import { TaskList } from "./taskList";
-import { TaskCreate } from "./taskCreate";
-import { TaskRead } from "./taskRead";
-import { TaskUpdate } from "./taskUpdate";
-import { TaskDelete } from "./taskDelete";
+import { ProductList } from "./taskList";
+import { ProductCreate } from "./taskCreate";
+import { ProductRead } from "./taskRead";
+import { ProductUpdate } from "./taskUpdate";
+import { ProductDelete } from "./taskDelete";
 
-export const tasksRouter = fromHono(new Hono());
+export const productsRouter = fromHono(new Hono());
 
-tasksRouter.get("/", TaskList);
-tasksRouter.post("/", TaskCreate);
-tasksRouter.get("/:id", TaskRead);
-tasksRouter.put("/:id", TaskUpdate);
-tasksRouter.delete("/:id", TaskDelete);
+productsRouter.get("/", ProductList);
+productsRouter.post("/", ProductCreate);
+productsRouter.get("/:id", ProductRead);
+productsRouter.put("/:id", ProductUpdate);
+productsRouter.delete("/:id", ProductDelete);
